@@ -5,7 +5,7 @@ How to set up a read-only replica in PostgreSQL using Supabase
 [https://supabase.com](https://supabase.com)
 
 ### Step 2: Duplicate the schema on the new (replica) project
-[Migrate the Database](https://supabase.com/docs/guides/database#migrate-the-database)
+[Migrate the Database Schema](https://supabase.com/docs/guides/database#migrate-the-database)
 
 **NOTE:** (Use the `-s` command line option of `pg_dump` to just dump the schema without data)
 
