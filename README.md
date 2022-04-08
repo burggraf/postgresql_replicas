@@ -23,8 +23,10 @@ CONNECTION 'postgresql://postgres:[PASSWORD]@[db_location]:5432/postgres'
 PUBLICATION my_publication;
 ```
 Where:
-`PASSWORD` is your `postgres` password, i.e. the password you created when you set up your project.  You can also reset your password from the Supabase dashboard here:
-`Dashboard` / `Settings` / `Database` / `Reset Database Password`
+
+`PASSWORD` is your `postgres` password, i.e. the password you created when you set up your project.  (You can also reset your password from the Supabase dashboard here: `Dashboard` / `Settings` / `Database` / `Reset Database Password`)
+
+`db_location` is your production database host name, found under `Dashboard` / `Settings` / `Database` / `Connection Info` / `Host', i.e. `db.xxxxxxxxxxxxxxxxxxx.supabase.co`
 
 ### Optional: to refresh the publication after any issues that might come up:
 
