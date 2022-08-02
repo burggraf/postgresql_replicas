@@ -28,6 +28,8 @@ Where:
 
 `db_location` is your production database host name, found under `Dashboard` / `Settings` / `Database` / `Connection Info` / `Host`, i.e. `db.xxxxxxxxxxxxxxxxxxx.supabase.co`
 
+NOTE: be sure to use port **5432** to connect to your PostgreSQL server, and not **6543**, which is the pg_bouncer connection pooling port.
+
 ### Optional: to refresh the publication after any issues that might come up:
 
 ```sql
