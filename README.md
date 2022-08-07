@@ -35,3 +35,19 @@ NOTE: be sure to use port **5432** to connect to your PostgreSQL server, and not
 ```sql
 ALTER SUBSCRIPTION my_subscription REFRESH PUBLICATION;
 ```
+
+### Debugging
+If the subscription isn't working or you receive errors in the log of the publication database related to replication, you may need to increase `max_worker_processes` on the **replica** database.  To do this go to the **replica** database and run the following:
+
+```sql
+show max_worker_processes;
+-- increase the value here
+alter system set max_worker_processes to '8';
+```
+
+Restart your **replica** database server.
+
+```sql
+show max_worker_processes;
+-- make sure the new setting has taken effect
+```
