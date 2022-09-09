@@ -6,13 +6,12 @@ How to set up a read-only replica using PostgreSQL Logical Replication with Supa
 
 ### Step 2: Migrate the database schema to the new (replica) project
 
-1. Run ALTER ROLE postgres SUPERUSER in the old project's SQL editor
-2. Run pg_dump --clean --if-exists --schema-only --quote-all-identifiers -h `OLD_DB_HOST` -U postgres > schema_dump.sql from your terminal
-3. Run ALTER ROLE postgres NOSUPERUSER in the old project's SQL editor
-4. Run ALTER ROLE postgres SUPERUSER in the new project's SQL editor
-5. Run psql -h `NEW_DB_HOST` -U postgres -f schema_dump.sql from your terminal
-6. Run TRUNCATE storage.objects in the new project's SQL editor
-7. Run ALTER ROLE postgres NOSUPERUSER in the new project's SQL editor
+1. Run `ALTER ROLE postgres SUPERUSER` in the old project's SQL editor
+2. Run `pg_dump --clean --if-exists --schema-only --quote-all-identifiers -h [OLD_DB_HOST] -U postgres > schema_dump.sql` from your terminal
+3. Run `ALTER ROLE postgres NOSUPERUSER` in the old project's SQL editor
+4. Run `ALTER ROLE postgres SUPERUSER` in the new project's SQL editor
+5. Run `psql -h [NEW_DB_HOST] -U postgres -f schema_dump.sql` from your terminal
+6. Run `ALTER ROLE postgres NOSUPERUSER` in the new project's SQL editor
 
 #### Notes for this step
 - You must use the Supabase Dashboard SQL Editor to change the postgres user from NOSUPERUSER to SUPERUSER and vice-versa.  The dashboard runs with the proper privileges to do this.  Connecting to the database with any other tool using the `postgres` user will not work.
