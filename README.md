@@ -14,8 +14,8 @@ How to set up a read-only replica using PostgreSQL Logical Replication with Supa
 6. Run `ALTER ROLE postgres NOSUPERUSER` in the new project's SQL editor
 
 #### Notes for this step
-- You must use the Supabase Dashboard SQL Editor to change the postgres user from NOSUPERUSER to SUPERUSER and vice-versa.  The dashboard runs with the proper privileges to do this.  Connecting to the database with any other tool using the `postgres` user will not work.
-- To find `OLD_DB_HOST` and `NEW_DB_HOST`, go to your [Supabase Settings Page](https://app.supabase.com/project/_/settings/database) and look under Connection Info / Host.  It will have the format of `db.zzzzzzzzzzzzzzzzzzzz.supabase.co` where `zzzzzzzzzzzzzzzzzzzz` is your project reference number.
+- You must use the [Supabase Dashboard SQL Editor](https://app.supabase.com/project/_/sql) to change the postgres user from `NOSUPERUSER` to `SUPERUSER` and vice-versa.  The dashboard runs with the proper privileges to do this.  Connecting to the database with any other tool using the `postgres` user will not work.
+- To find `[OLD_DB_HOST]` and `[NEW_DB_HOST]`, go to your [Supabase Settings Page](https://app.supabase.com/project/_/settings/database) and look under Connection Info / Host.  It will have the format of `db.zzzzzzzzzzzzzzzzzzzz.supabase.co` where `zzzzzzzzzzzzzzzzzzzz` is your project reference number.
 - It's important to use the `--schema-only` option here, as you only want to dump the schema, and not the data.
 
 ### Step 3: Create a publication on the production database
