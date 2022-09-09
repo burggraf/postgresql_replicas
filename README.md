@@ -1,13 +1,23 @@
-# postgresql_replicas
-How to set up a read-only replica in PostgreSQL using Supabase
+# PostgreSQL Logical Replication with Supabase
+How to set up a read-only replica using PostgreSQL Logical Replication with Supabase
 
 ### Step 1: Set up a new project in Supabase to host your replica database
 [https://supabase.com](https://supabase.com)
 
-### Step 2: Duplicate the schema on the new (replica) project
-[Migrate the Database Schema](https://supabase.com/docs/guides/database#migrate-the-database)
+### Step 2: Migrate the database schema to the new (replica) project
 
-**NOTE:** (Use the `-s` command line option of `pg_dump` to just dump the schema without data)
+1. Run ALTER ROLE postgres SUPERUSER in the old project's SQL editor
+2. Run pg_dump --clean --if-exists --schema-only --quote-all-identifiers -h `OLD_DB_HOST` -U postgres > schema_dump.sql from your terminal
+3. Run ALTER ROLE postgres NOSUPERUSER in the old project's SQL editor
+4. Run ALTER ROLE postgres SUPERUSER in the new project's SQL editor
+5. Run psql -h `NEW_DB_HOST` -U postgres -f schema_dump.sql from your terminal
+6. Run TRUNCATE storage.objects in the new project's SQL editor
+7. Run ALTER ROLE postgres NOSUPERUSER in the new project's SQL editor
+
+#### Notes for this step
+- You must use the Supabase Dashboard SQL Editor to change the postgres user from NOSUPERUSER to SUPERUSER and vice-versa.  The dashboard runs with the proper privileges to do this.  Connecting to the database with any other tool using the `postgres` user will not work.
+- To find `OLD_DB_HOST` and `NEW_DB_HOST`, go to your [Supabase Settings Page](https://app.supabase.com/project/_/settings/database) and look under Connection Info / Host.  It will have the format of `db.zzzzzzzzzzzzzzzzzzzz.supabase.co` where `zzzzzzzzzzzzzzzzzzzz` is your project reference number.
+- It's important to use the `--schema-only` option here, as you only want to dump the schema, and not the data.
 
 ### Step 3: Create a publication on the production database
 
@@ -15,39 +25,32 @@ How to set up a read-only replica in PostgreSQL using Supabase
 CREATE PUBLICATION my_publication FOR ALL TABLES;
 ```
 
+#### Notes for this step
+- If you only want to replicate specific tables, you can use:
+`CREATE PUBLICATION my_publication FOR TABLE table1, table2, table3;`
+- The schema for each table in in your publication must exist in the replica database before you move on to create the subscription. 
+
 ### Step 4: Create a subscription on the replica database
 
 ```sql
 CREATE SUBSCRIPTION my_subscription
-CONNECTION 'postgresql://postgres:[PASSWORD]@[db_location]:5432/postgres' 
+CONNECTION 'postgresql://postgres:[PASSWORD]@[OLD_DB_HOST]:5432/postgres' 
 PUBLICATION my_publication;
 ```
-Where:
 
-`PASSWORD` is your `postgres` password, i.e. the password you created when you set up your project.  (You can also reset your password from the Supabase dashboard here: `Dashboard` / `Settings` / `Database` / `Reset Database Password`)
+#### Notes for this section
 
-`db_location` is your production database host name, found under `Dashboard` / `Settings` / `Database` / `Connection Info` / `Host`, i.e. `db.xxxxxxxxxxxxxxxxxxx.supabase.co`
+- `PASSWORD` is your `postgres` password, i.e. the password you created when you set up your project.  (You can also reset your password from the [Supabase Dashboard](https://app.supabase.com/project/_/settings/database) under `Dashboard` / `Settings` / `Database` / `Reset Database Password`) 
+- `OLD_DB_HOST` is your primary database host name, used in the steps above
+- be sure to use port **5432** to connect to your PostgreSQL server, and not **6543**, which is the pg_bouncer connection pooling port.
 
-NOTE: be sure to use port **5432** to connect to your PostgreSQL server, and not **6543**, which is the pg_bouncer connection pooling port.
+##  Debugging your replication
+See [Debugging PostgreSQL Logical Replication](./debugging.md)
 
-### Optional: to refresh the publication after any issues that might come up:
+### Notes regarding database migrations / schema changes
 
-```sql
-ALTER SUBSCRIPTION my_subscription REFRESH PUBLICATION;
-```
+- Be careful with schema changes, they don't propagate to the replicas automatically, and will cause the replica to stop syncing.
 
-### Debugging
-If the subscription isn't working or you receive errors in the log of the publication database related to replication, you may need to increase `max_worker_processes` on the **replica** database.  To do this go to the **replica** database and run the following:
+- If you use `DROP CASCADE` on the `public` schema when attempting to resync schemas, it can cause the `realtime.subscription` to drop.
 
-```sql
-show max_worker_processes;
--- increase the value here
-alter system set max_worker_processes to '8';
-```
 
-Restart your **replica** database server.
-
-```sql
-show max_worker_processes;
--- make sure the new setting has taken effect
-```
