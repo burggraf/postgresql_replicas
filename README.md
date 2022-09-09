@@ -53,4 +53,4 @@ See [Debugging PostgreSQL Logical Replication](./debugging.md)
 - If you use `DROP CASCADE` on the `public` schema when attempting to resync schemas, it can cause the `realtime.subscription` to drop.
 
 ## Acknowlegements
-Thanks to Colin from Zverse for pointing out some of these great debugging techniques that help solve issues related to datbase migrations.
+Thanks to Colin from Zverse for pointing out some of these great debugging techniques that help solve issues related to database migrations.
