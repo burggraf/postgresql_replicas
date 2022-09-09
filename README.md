@@ -39,7 +39,7 @@ PUBLICATION my_publication;
 
 #### Notes for this section
 
-- `PASSWORD` is your `postgres` password, i.e. the password you created when you set up your project.  (You can also reset your password from the [Supabase Dashboard](https://app.supabase.com/project/_/settings/database) under `Dashboard` / `Settings` / `Database` / `Reset Database Password`) 
+- `[PASSWORD]` is your `postgres` password, i.e. the password you created when you set up your project.  (You can also reset your password from the [Supabase Dashboard](https://app.supabase.com/project/_/settings/database) under `Dashboard` / `Settings` / `Database` / `Reset Database Password`) 
 - `[OLD_DB_HOST]` is your primary database host name, used in the steps above
 - be sure to use port **5432** to connect to your PostgreSQL server, and not **6543**, which is the pg_bouncer connection pooling port.
 
