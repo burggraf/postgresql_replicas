@@ -57,4 +57,3 @@ When re-recreating the subscription on the replica, you may receive an error say
 select * from pg_replication_slots;
 select pg_drop_replication_slot('my_subscription');
 ```
-
