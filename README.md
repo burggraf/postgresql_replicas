@@ -28,6 +28,7 @@ CREATE PUBLICATION my_publication FOR ALL TABLES;
 - If you only want to replicate specific tables, you can use:
 `CREATE PUBLICATION my_publication FOR TABLE table1, table2, table3;`
 - The schema for each table in in your publication must exist in the replica database before you move on to create the subscription. 
+- `supabase_realtime` is a reserved publication name, and cannot be used.
 
 ### Step 4: Create a subscription on the replica database
 
