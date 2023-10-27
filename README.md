@@ -1,3 +1,5 @@
+# DEPRECATED:  It's no longer possible to gain superuser access so this won't work on Supabase databases.
+
 # PostgreSQL Logical Replication with Supabase
 How to set up a read-only replica using PostgreSQL Logical Replication with Supabase
 
